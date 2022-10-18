@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 8831868795453186940}
   - component: {fileID: 3126209401012105422}
   - component: {fileID: 4242692367914099446}
+  - component: {fileID: 2587515859150162125}
   m_Layer: 0
   m_Name: Ball
   m_TagString: Untagged
@@ -95,7 +96,7 @@ CircleCollider2D:
   m_GameObject: {fileID: 276421411201114391}
   m_Enabled: 1
   m_Density: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: c3134951a7026b54ca988989b376a86e, type: 2}
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
@@ -118,8 +119,20 @@ Rigidbody2D:
   m_LinearDrag: 0
   m_AngularDrag: 0.05
   m_GravityScale: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: c3134951a7026b54ca988989b376a86e, type: 2}
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
+--- !u!114 &2587515859150162125
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 276421411201114391}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c8cc09f3e7f69e4aa12677419a042ca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

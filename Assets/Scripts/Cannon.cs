@@ -5,6 +5,16 @@ using UnityEngine;
 
 public class Cannon : MonoBehaviour
 {
+    #region singleton
+    
+    public static Cannon instance;
+
+    void Awake() {
+        instance = this;
+    }
+
+    #endregion
+    
     public GameObject cannonBall;
 
     private Vector3 difference;
@@ -20,6 +30,8 @@ public class Cannon : MonoBehaviour
     private bool reload = false;
 
     private float timer;
+
+    public int bulletCount = 5;
 
     //Trajectory
     
@@ -57,12 +69,14 @@ public class Cannon : MonoBehaviour
             Show();
         }
         
-        if (Input.GetMouseButtonUp(0) && !reload)
+        if (Input.GetMouseButtonUp(0) && !reload && bulletCount > 0)
         {
             _pressingMouse = false;
             Fire();
             Hide();
+            bulletCount--;
         }
+        
 
         if (_pressingMouse)
         {
@@ -96,9 +110,13 @@ public class Cannon : MonoBehaviour
     void Fire()
     {
         GameObject newBall = BallPoolling.instance.GetBallFromPool();
+        
         newBall.transform.position = firePoint.position;
+        
         newBall.SetActive(true);
+        
         newBall.GetComponent<Rigidbody2D>().AddForce((_initialVelocity * power) , ForceMode2D.Impulse);
+        
         reload = true;
     }
 
@@ -145,5 +163,13 @@ public class Cannon : MonoBehaviour
     void Hide()
     {
         dotsParent.SetActive(false);
+    }
+
+    private void OnTriggerEnter2D(Collider2D col)
+    {
+        if (col.gameObject.CompareTag("Enemy"))
+        {
+            Debug.Log("Cannon died");
+        }
     }
 }
