@@ -8,7 +8,7 @@ public class DodgeState : State
     public AttackState attackState;
     public override State RunCurrentState()
     {
-        if (!EnemyAI.instance.left && !EnemyAI.instance.right && Cannon.instance.bulletCount > 0)
+        if (!EnemyAI.instance.doOnce && !EnemyAI.instance.doOnce && Cannon.instance.bulletCount > 0)
         {
             return idleState;
         }
@@ -20,17 +20,28 @@ public class DodgeState : State
         
         else
         {
-            if (EnemyAI.instance.left)
+            if (EnemyAI.instance.doOnce)
             {
-                EnemyAI.instance.rb2d.velocity = new Vector2(-1f, 0f) * EnemyAI.instance.speed;
+                if (0.75f < EnemyAI.instance.direction.y && 0f > EnemyAI.instance.direction.x)
+                {
+                    EnemyAI.instance.rb2d.velocity = Vector2.right * EnemyAI.instance.speed;
+                }
+                else if (0.75f < EnemyAI.instance.direction.y && 0f < EnemyAI.instance.direction.x)
+                {
+                    EnemyAI.instance.rb2d.velocity = Vector2.left * EnemyAI.instance.speed;
+                }
+                else if (0.75f > EnemyAI.instance.direction.y && 0f > EnemyAI.instance.direction.x && 0.25f < EnemyAI.instance.direction.y)
+                {
+                    EnemyAI.instance.rb2d.velocity = new Vector2(1, 1) * EnemyAI.instance.speed / 2;
+                }
+                else if (0.25f > EnemyAI.instance.direction.y && 0f > EnemyAI.instance.direction.x && -1f < EnemyAI.instance.direction.y )
+                {
+                    EnemyAI.instance.rb2d.velocity = new Vector2(0, 0.5f) * EnemyAI.instance.speed;
+                }
                 StartCoroutine(ResetMoveBool());
+                EnemyAI.instance.doOnce = false;
             }
-
-            if (EnemyAI.instance.right)
-            {
-                EnemyAI.instance.rb2d.velocity = new Vector2(1f, 0f) * EnemyAI.instance.speed;
-                StartCoroutine(ResetMoveBool());
-            }
+            
             return this;
         }
     }
@@ -38,8 +49,6 @@ public class DodgeState : State
     IEnumerator ResetMoveBool()
     {
         yield return new WaitForSeconds(0.5f);
-        EnemyAI.instance.left = false;
-        EnemyAI.instance.right = false;
-        EnemyAI.instance.rb2d.velocity = new Vector2(0, 0f) * EnemyAI.instance.speed;
+        EnemyAI.instance.rb2d.velocity = new Vector2(0, 0);
     }
 }

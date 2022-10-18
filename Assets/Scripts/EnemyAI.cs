@@ -1,14 +1,16 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class EnemyAI : MonoBehaviour
 {
     public Rigidbody2D rb2d;
-    public float speed = 2;
-    public bool left; 
-    public bool right;
+    public float speed;
+    public Vector3 direction;
+    public bool doOnce = false;
+
     
     #region singleton
     
@@ -20,29 +22,25 @@ public class EnemyAI : MonoBehaviour
 
     #endregion
 
-
-
-    /*public void Dodge()
+    private void Update()
     {
-        if (left)
-        {
-            rb2d.velocity = new Vector2(-1f, 0f) * speed;
-            StartCoroutine(ResetMoveBool());
-        }
+        Collider2D coll = Physics2D.OverlapCircle(transform.position, 2.5f);
 
-        if (right)
-        {
-            rb2d.velocity = new Vector2(1f, 0f) * speed;
-            StartCoroutine(ResetMoveBool());
-        }
-    }*/
-    
-    IEnumerator ResetMoveBool()
-    {
-        yield return new WaitForSeconds(0.5f);
-        left = false;
-        right = false;
-        rb2d.velocity = new Vector2(0, 0f) * speed;
+            if (coll.tag == "Ball" && !doOnce)
+            {
+                direction = (coll.transform.position - transform.position).normalized;
+                StartCoroutine(ResetDoOnce());
+                doOnce = true;
+            }
     }
     
+    IEnumerator ResetDoOnce()
+    {
+        yield return new WaitForSeconds(2f);
+        doOnce = false;
+    }
+    private void OnDrawGizmos()
+    {
+        Gizmos.DrawWireSphere(new Vector3(transform.position.x, transform.position.y, 0), 2.5f);
+    }
 }

@@ -8,7 +8,7 @@ public class IdleState : State
     public AttackState attackState;
     public override State RunCurrentState()
     {
-        if (EnemyAI.instance.left || EnemyAI.instance.right)
+        if (EnemyAI.instance.doOnce)
         {
             return dodgeState;
         }
